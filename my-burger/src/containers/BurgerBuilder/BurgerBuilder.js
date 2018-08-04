@@ -102,7 +102,7 @@ class BurgerBuilder extends Component {
     }
 
     render() {
-        //As I see it, disabledControls() is defined here since it's strictly
+        //As I see it, disabledControls is defined here since it's strictly
         //an inference of some UI state (disabled "LESS" buttons in this case)
         //based on the current state
         //i.e it's not an event handler like the arrow functions above
