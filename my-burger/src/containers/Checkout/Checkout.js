@@ -19,17 +19,28 @@ class Checkout extends Component {
     }
 
     componentDidMount () {
-        const ingredients = qs.parse(this.props.location.search)
-        this.setState({ ingredients })
+        const query = qs.parse(this.props.location.search)
+        const { salad, meat, bacon, cheese, totalPrice } = query
+
+        this.setState({
+            ingredients: {
+                salad, meat, bacon, cheese
+            },
+            totalPrice
+        })
         
         /* Suggested by Max, the teacher. It's native!
         const ingredients = {}
         const query = new URLSearchParams(this.props.location.search)
         for(let param of query.entries()) {
             // ['bacon', '2']
-            ingredients[param[0]] = param[1]
+            if(param[0] === 'price') {
+                price = param[1]
+            } else {
+                ingredients[param[0]] = param[1]
+            }
         }
-        this.setState({ ingredients })
+        this.setState({ ingredients, totalPrice })
         */
     }
 
@@ -40,7 +51,13 @@ class Checkout extends Component {
                     ingredients={this.state.ingredients} 
                     checkoutCanceled={this.checkoutCanceledHandler}
                     checkoutContinued={this.checkoutContinuedHandler} />
-                <Route path={this.props.match.path + '/contact-data'} component={ContactData} />
+                <Route
+                    path={this.props.match.path + '/contact-data'}
+                    render={(props) => <ContactData
+                        ingredients={this.state.ingredients} 
+                        totalPrice={this.state.totalPrice} 
+                        {...props} /> 
+                    } />
             </div>
         ) 
     }
