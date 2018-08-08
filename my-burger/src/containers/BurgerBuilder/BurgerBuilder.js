@@ -74,6 +74,7 @@ class BurgerBuilder extends Component {
     cancelPurchaseHandler = () => this.setState({ purchasing: false })
 
     purchaseHandler = () => {
+        /*
         this.setState({loading: true})
         const { ingredients, totalPrice } = this.state
         axios.post('/orders.json', {
@@ -90,6 +91,8 @@ class BurgerBuilder extends Component {
             deliveryMethod: 'fastest'
         }).then(() => this.setState({ loading: false, purchasing: false }))
         .catch(() => this.setState({ loading: false, purchasing: false }))
+        */
+        this.props.history('/')
     }
 
     componentDidMount () {
