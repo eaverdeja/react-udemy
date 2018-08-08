@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import reduce from 'lodash/reduce'
 import axios from '../../axios-orders'
+import qs from 'query-string'
 
 import Aux from '../../hoc/Aux/Aux'
 import Burger from '../../components/Burger/Burger'
@@ -92,7 +93,7 @@ class BurgerBuilder extends Component {
         }).then(() => this.setState({ loading: false, purchasing: false }))
         .catch(() => this.setState({ loading: false, purchasing: false }))
         */
-        this.props.history('/')
+        this.props.history.push(`/checkout?${qs.stringify(this.state.ingredients)}`)
     }
 
     componentDidMount () {

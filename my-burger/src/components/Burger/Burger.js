@@ -53,7 +53,7 @@ const burger = (props) => {
     )
 
     //Flattening
-    ingredients = ingredients.reduce((arr, el) => arr.concat(el))
+    ingredients = ingredients.reduce((arr, el) => arr.concat(el), [])
 
     if (ingredients.length === 0) {
         ingredients = <p>Please start adding some ingredients!</p>
