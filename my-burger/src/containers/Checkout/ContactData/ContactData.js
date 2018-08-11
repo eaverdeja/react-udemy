@@ -3,8 +3,9 @@ import React, { Component } from 'react'
 import Button from '../../../components/UI/Button/Button'
 import classes from './ContactData.css'
 import axios from '../../../axios-orders'
-import Spinner from '../../../components/UI/Spinner/Spinner';
-import Input from '../../../components/UI/Input/Input';
+import Spinner from '../../../components/UI/Spinner/Spinner'
+import Input from '../../../components/UI/Input/Input'
+import map from 'lodash/map'
 
 class ContactData extends Component {
     state = {
@@ -12,7 +13,7 @@ class ContactData extends Component {
             name: this.createInput('input', { placeholder: 'Your Name'}),
             street: this.createInput('input', { placeholder: 'Street'}),
             zipCode: this.createInput('input', { placeholder: 'ZIP Code'}),
-            country: this.createInput('input', { placeholder: 'ZIP Code'}),
+            country: this.createInput('input', { placeholder: 'Country'}),
             email: this.createInput('email', { placeholder: 'Email'}),
             deliveryMethod: this.createInput('select',
             {
@@ -52,12 +53,19 @@ class ContactData extends Component {
     }
 
     render() {
+        const inputs = map(this.state.orderForm,
+            ({ elementType, elementConfig, value }, key) => (
+                <Input
+                    key={key}
+                    elementType={elementType}
+                    elementConfig={elementConfig}
+                    value={value} />
+            )
+        )
+
         let form = (
             <form>
-                <Input
-                    elementType="input"
-                    elementConfig="..."
-                    value="..." />
+                { inputs }
                 <Button
                     btnType="Success"
                     clicked={this.orderHandler}
