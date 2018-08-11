@@ -8,13 +8,34 @@ import Input from '../../../components/UI/Input/Input';
 
 class ContactData extends Component {
     state = {
-        name: '',
-        email: '',
-        address: {
-            street: '',
-            postalCode: ''
+        orderForm: {
+            name: this.createInput('input', { placeholder: 'Your Name'}),
+            street: this.createInput('input', { placeholder: 'Street'}),
+            zipCode: this.createInput('input', { placeholder: 'ZIP Code'}),
+            country: this.createInput('input', { placeholder: 'ZIP Code'}),
+            email: this.createInput('email', { placeholder: 'Email'}),
+            deliveryMethod: this.createInput('select',
+            {
+                options: [
+                    { value: 'fastest', displayValue: 'Fastest' },
+                    { value: 'fastest', displayValue: 'Fastest'}
+                ]
+            }),
         },
         loading: false
+    }
+
+    createInput(elementType, elementConfig, value = '') {
+        //If no type is given for the elementConfig,
+        //we use 'text' by default by destructuring elementConfig
+        const { type = 'text' } = elementConfig
+        return {
+            elementType,
+            //We spread out elementConfig and then
+            //we overwrite the type property
+            elementConfig: { ...elementConfig, type },
+            value
+        }
     }
     
     orderHandler = (e) => {
@@ -23,15 +44,6 @@ class ContactData extends Component {
         axios.post('/orders.json', {
             ingredients: this.props.ingredients,
             totalPrice: this.props.totalPrice,
-            customer: {
-                name: "Eduardo Verdeja",
-                address: {
-                    street: "No name Street",
-                    zipCode: '12345'
-                },
-                email: 'eduardo.verdeja@gmail.com'
-            },
-            deliveryMethod: 'fastest'
         }).then(() => {
             this.setState({ loading: false })
             this.props.history.push('/')
@@ -43,25 +55,9 @@ class ContactData extends Component {
         let form = (
             <form>
                 <Input
-                    inputtype="input"
-                    type="text"
-                    name="name"
-                    placeholder="Your name"/>
-                <Input
-                    inputtype="input"
-                    type="email"
-                    name="email"
-                    placeholder="Your email"/>
-                <Input
-                    inputtype="input"
-                    type="text"
-                    name="street"
-                    placeholder="Street"/>
-                <Input
-                    inputtype="input"
-                    type="text"
-                    name="postalCode"
-                    placeholder="Postal Code"/>
+                    elementType="input"
+                    elementConfig="..."
+                    value="..." />
                 <Button
                     btnType="Success"
                     clicked={this.orderHandler}
