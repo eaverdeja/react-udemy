@@ -52,6 +52,29 @@ class ContactData extends Component {
         .catch(() => this.setState({ loading: false }))
     }
 
+    //Here we use destructuring twice. Once for getting the target
+    //from the event object, then a second time for getting the value
+    //from the target
+    inputChangedHandler = ({ target: { value } }, key) => {
+        //The array syntax let's us use the key
+        //for retrieving the previous input dynamically
+        const previousInput = this.state.orderForm[key]
+        const newInput = {
+            ...previousInput,
+            value
+        }
+        //We create a clone of the order form by desructuring it
+        //Computed property names leverage the key
+        //for setting the state on the correct input
+        //from the orderForm
+        const updatedOrderForm = {
+            ...this.state.orderForm,
+            [key]: newInput
+        }
+        //Cloning the ordemForm keeps the state changes immutable
+        this.setState({ orderForm: updatedOrderForm })
+    }
+
     render() {
         const inputs = map(this.state.orderForm,
             ({ elementType, elementConfig, value }, key) => (
@@ -59,7 +82,8 @@ class ContactData extends Component {
                     key={key}
                     elementType={elementType}
                     elementConfig={elementConfig}
-                    value={value} />
+                    value={value}
+                    changed={(event) => this.inputChangedHandler(event, key)} />
             )
         )
 
