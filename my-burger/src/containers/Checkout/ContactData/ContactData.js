@@ -61,7 +61,7 @@ class ContactData extends Component {
         //destructuring it let's us pass the necessary
         //properties in any order while assigning
         //default values for the optional properties
-        const { elementType, config, value = '', validation = {}, valid = true } = options
+        const { elementType, config, value = '', validation = {}, valid = false } = options
         //If no type is given for the config,
         //we use 'text' by default by destructuring config
         //i.e. that's how i dealt with nested default properties
@@ -141,12 +141,14 @@ class ContactData extends Component {
 
     render() {
         const inputs = map(this.state.orderForm,
-            ({ type, config, value }, key) => (
+            ({ elementType, config, value, valid, validation }, key) => (
                 <Input
                     key={key}
-                    type={type}
+                    elementType={elementType}
                     config={config}
                     value={value}
+                    invalid={!valid}
+                    shouldValidate={!isEmpty(validation)}
                     changed={(event) => this.inputChangedHandler(event, key)} />
             )
         )
