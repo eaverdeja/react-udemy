@@ -3,7 +3,7 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-    return
+    return state
 }
 
 export default reducer
