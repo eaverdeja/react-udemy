@@ -50,6 +50,7 @@ class ContactData extends Component {
                 }
             }),
         },
+        formIsValid: false,
         loading: false
     }
 
@@ -144,8 +145,19 @@ class ContactData extends Component {
             ...this.state.orderForm,
             [key]: newInput
         }
+        
+        let formIsValid = true
+        map(updatedOrderForm, (element, name) => {
+            if(!isEmpty(element.validation)) {
+                formIsValid = formIsValid && element.valid
+            }
+        })
+
         //Cloning the ordemForm keeps the state changes immutable
-        this.setState({ orderForm: updatedOrderForm })
+        this.setState({
+            orderForm: updatedOrderForm,
+            formIsValid
+        })
     }
 
     render() {
@@ -167,7 +179,11 @@ class ContactData extends Component {
         let form = (
             <form onSubmit={this.orderHandler}>
                 { inputs }
-                <Button btnType="Success">ORDER</Button>
+                <Button
+                    btnType="Success"
+                    disabled={!this.state.formIsValid}>
+                    ORDER
+                </Button>
             </form>
         )
         if(this.state.loading) {
