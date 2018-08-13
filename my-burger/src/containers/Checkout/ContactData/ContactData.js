@@ -61,7 +61,14 @@ class ContactData extends Component {
         //destructuring it let's us pass the necessary
         //properties in any order while assigning
         //default values for the optional properties
-        const { elementType, config, value = '', validation = {}, valid = false } = options
+        const {
+            elementType,
+            config,
+            value = '',
+            validation = {},
+            valid = false,
+            touched = false
+        } = options
         //If no type is given for the config,
         //we use 'text' by default by destructuring config
         //i.e. that's how i dealt with nested default properties
@@ -73,7 +80,8 @@ class ContactData extends Component {
             config: { ...config, type },
             value,
             validation,
-            valid
+            valid,
+            touched
         }
     }
     
@@ -125,7 +133,8 @@ class ContactData extends Component {
         const newInput = {
             ...previousInput,
             value,
-            valid: this.checkValidity(value, previousInput.validation)
+            valid: this.checkValidity(value, previousInput.validation),
+            touched: true
         }
         //We create a clone of the order form by desructuring it
         //Computed property names leverage the key
@@ -140,17 +149,19 @@ class ContactData extends Component {
     }
 
     render() {
-        const inputs = map(this.state.orderForm,
-            ({ elementType, config, value, valid, validation }, key) => (
-                <Input
-                    key={key}
-                    elementType={elementType}
-                    config={config}
-                    value={value}
-                    invalid={!valid}
-                    shouldValidate={!isEmpty(validation)}
-                    changed={(event) => this.inputChangedHandler(event, key)} />
-            )
+        const inputs = map(
+            this.state.orderForm,
+            (options, key) => {
+                const { valid, validation } = options
+                return (
+                    <Input
+                        key={key}
+                        {...options}
+                        invalid={!valid}
+                        shouldValidate={!isEmpty(validation)}
+                        changed={(event) => this.inputChangedHandler(event, key)} />
+                )
+            }
         )
 
         let form = (
