@@ -25,6 +25,9 @@ const rootReducer = (state = initialState, action) => {
 const store = redux.createStore(rootReducer)
 console.log(store.getState())
 
+store.subscribe(() => {
+    console.log('[Subscription]', store.getState())
+})
+
 store.dispatch({type: 'INCREMENT'})
 store.dispatch({type: 'ADD', value: 10})
-console.log(store.getState())
