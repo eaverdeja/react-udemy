@@ -6,36 +6,74 @@ import axios from '../../../axios-orders'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import Input from '../../../components/UI/Input/Input'
 import map from 'lodash/map'
+import isEmpty from 'lodash/isEmpty'
 
 class ContactData extends Component {
     state = {
         orderForm: {
-            name: this.createInput('input', { placeholder: 'Your Name'}),
-            street: this.createInput('input', { placeholder: 'Street'}),
-            zipCode: this.createInput('input', { placeholder: 'ZIP Code'}),
-            country: this.createInput('input', { placeholder: 'Country'}),
-            email: this.createInput('email', { placeholder: 'Email'}),
-            deliveryMethod: this.createInput('select',
-            {
-                options: [
-                    { value: 'fastest', displayValue: 'Fastest' },
-                    { value: 'cheapest', displayValue: 'Cheapest'}
-                ]
+            name: this.createInput({
+                elementType: 'input',
+                config: { placeholder: 'Your Name'},
+                validation: { required: true },
+            }),
+            street: this.createInput({
+                elementType: 'input',
+                config: { placeholder: 'Street'},
+                validation: { required: true },
+            }),
+            zipCode: this.createInput({
+                elementType: 'input',
+                config: { placeholder: 'ZIP Code'},
+                validation: {
+                    required: true,
+                    minLength: 5,
+                    maxLength: 5
+                },
+            }),
+            country: this.createInput({
+                elementType: 'input',
+                config: { placeholder: 'Country'},
+                validation: { required: true },
+            }),
+            email: this.createInput({
+                elementType: 'email',
+                config: { placeholder: 'Email'},
+                validation: { required: true },
+            }),
+            deliveryMethod: this.createInput({
+                elementType: 'select',
+                config: {
+                    options: [
+                        { value: 'fastest', displayValue: 'Fastest' },
+                        { value: 'cheapest', displayValue: 'Cheapest'}
+                    ]
+                }
             }),
         },
         loading: false
     }
 
-    createInput(elementType, elementConfig, value = '') {
-        //If no type is given for the elementConfig,
-        //we use 'text' by default by destructuring elementConfig
-        const { type = 'text' } = elementConfig
+    //This short (but kinda hard to read - meh) factory function
+    //makes our state declaration much shorter and our dynamic
+    //form manipulation easier to enhance
+    createInput(options) {
+        //Receiving an options object as the only parameter and
+        //destructuring it let's us pass the necessary
+        //properties in any order while assigning
+        //default values for the optional properties
+        const { elementType, config, value = '', validation = {}, valid = true } = options
+        //If no type is given for the config,
+        //we use 'text' by default by destructuring config
+        //i.e. that's how i dealt with nested default properties
+        const { type = 'text' } = config
         return {
             elementType,
-            //We spread out elementConfig and then
+            //We spread out config and then
             //we overwrite the type property
-            elementConfig: { ...elementConfig, type },
-            value
+            config: { ...config, type },
+            value,
+            validation,
+            valid
         }
     }
     
@@ -57,6 +95,26 @@ class ContactData extends Component {
         .catch(() => this.setState({ loading: false }))
     }
 
+    checkValidity(value, rules) {
+        if(isEmpty(rules)) return
+
+        let isValid = false
+
+        if(rules.required) {
+            isValid = value.trim() !== ''
+        }
+
+        if(rules.minLength) {
+            isValid = value.length >= rules.minLength
+        }
+        
+        if(rules.maxLength) {
+            isValid = value.length <= rules.maxLength
+        }
+
+        return isValid
+    }
+
     //Here we use destructuring twice. Once for getting the target
     //from the event object, then a second time for getting the value
     //from the target
@@ -66,7 +124,8 @@ class ContactData extends Component {
         const previousInput = this.state.orderForm[key]
         const newInput = {
             ...previousInput,
-            value
+            value,
+            valid: this.checkValidity(value, previousInput.validation)
         }
         //We create a clone of the order form by desructuring it
         //Computed property names leverage the key
@@ -82,11 +141,11 @@ class ContactData extends Component {
 
     render() {
         const inputs = map(this.state.orderForm,
-            ({ elementType, elementConfig, value }, key) => (
+            ({ type, config, value }, key) => (
                 <Input
                     key={key}
-                    elementType={elementType}
-                    elementConfig={elementConfig}
+                    type={type}
+                    config={config}
                     value={value}
                     changed={(event) => this.inputChangedHandler(event, key)} />
             )

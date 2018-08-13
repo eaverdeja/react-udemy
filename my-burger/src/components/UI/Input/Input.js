@@ -4,23 +4,23 @@ import classes from './Input.css'
 
 const input = (props) => {
     let inputElement = null
-    switch(props.elementType) {
+    switch(props.type) {
         case 'input':
             inputElement = <input
                 className={classes.InputElement}
                 onChange={props.changed}
-                value={props.value} 
-                {...props.elementConfig} />
+                value={props.value}
+                {...props.config} />
             break
         case 'textarea':
             inputElement = <textarea
                 className={classes.InputElement}
                 onChange={props.changed}
                 value={props.value} 
-                {...props.elementConfig} />
+                {...props.config} />
             break
         case 'select':
-            const options = props.elementConfig
+            const options = props.config
                 .options.map( option => (
                     <option key={option.value} value={option.value}>
                         {option.displayValue}
@@ -40,8 +40,8 @@ const input = (props) => {
             inputElement = <input
                 className={classes.InputElement}
                 onChange={props.changed}
-                value={props.value} 
-                {...props.elementConfig} />
+                value={props.value}
+                {...props.config} />
     }
 
     return (
