@@ -7,7 +7,7 @@ import {
     SUBTRACT,
     STORE_RESULT,
     DELETE_RESULT
-} from './actions'
+} from '../../store/actions'
 
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
@@ -49,8 +49,8 @@ class Counter extends Component {
 }
 
 const mapStateToProps = ({ counter, results }) => ({
-    counter,
-    results
+    counter: counter.value,
+    results: results.values
 })
 
 const mapDispatchToProps = dispatch => ({
