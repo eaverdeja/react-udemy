@@ -1,3 +1,12 @@
+import {
+    INCREMENT,
+    DECREMENT,
+    ADD,
+    SUBTRACT,
+    STORE_RESULT,
+    DELETE_RESULT
+} from './actions'
+
 const initialState = {
     counter: 0,
     results: []
@@ -5,27 +14,27 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
-        case 'INCREMENT':
+        case INCREMENT:
             return {
                 ...state,
                 counter: state.counter + 1
             }
-        case 'DECREMENT':
+        case DECREMENT:
             return {
                 ...state,
                 counter: state.counter - 1
             }
-        case 'ADD':
+        case ADD:
             return {
                 ...state,
                 counter: state.counter + action.value
             }
-        case 'SUBTRACT':
+        case SUBTRACT:
             return {
                 ...state,
                 counter: state.counter - action.value
             }
-        case 'STORE_RESULT':
+        case STORE_RESULT:
             const now = new Date()
             return {
                 ...state,
@@ -37,7 +46,7 @@ const reducer = (state = initialState, action) => {
                     }
                 ]
             }
-        case 'DELETE_RESULT':
+        case DELETE_RESULT:
             const newResults = state
                 .results
                 .filter(result => result.id !== action.id)
