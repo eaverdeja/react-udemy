@@ -1,49 +1,65 @@
-import { ADD_INGREDIENT, REMOVE_INGREDIENT, SET_INGREDIENTS } from "../actions";
+import { ADD_INGREDIENT, REMOVE_INGREDIENT } from "../actions";
 
-const initialState = {
-    ingredients: null
+const INGREDIENT_PRICES = {
+    'salad': 0.5,
+    'bacon': 0.7,
+    'meat': 0.6,
+    'cheese': 0.4
 }
 
-function updateIngredient (state, ingredientType, op) {
-    const oldCount = state.ingredients[ingredientType]
-    
-    const newCount = op(oldCount, 1)
-    if(newCount < 0) return
+const initialState = {
+    ingredients: {
+        salad: 1,
+        meat: 1,
+        bacon: 1,
+        cheese: 1
+    },
+    totalPrice: 4
+}
 
-    return newCount
+//These helper functions help in keeping our
+//burger reducer DRY for the moment, seeing as ADD_IGREDIENT
+//and REMOVE_INGREDIENT only differ in the operation type (+/-)
+function updateIngredient (state, ingredientType, operation) {
+    const oldCount = state.ingredients[ingredientType]
+    const newCount = operation(oldCount, 1)
+
+    if(newCount < 0) return false
+
+    const newPrice = operation(state.totalPrice, INGREDIENT_PRICES[ingredientType])
+        
+    return {
+        newCount,
+        newPrice
+    }
+}
+
+function buildUpdatedState ({state, ingredientType, operation}) {
+    const { newCount, newPrice } = updateIngredient(state, ingredientType, operation)
+    return {
+        ...state,
+        ingredients: {
+            ...state.ingredients,
+            [ingredientType]: newCount
+        },
+        totalPrice: newPrice
+    }
 }
 
 const burgerReducer = (state = initialState, action) => {
-    let newCount = null
     switch(action.type) {
-        case SET_INGREDIENTS: 
-            return {
-                ...state,
-                ingredients: {
-                    salad: 1,
-                    meat: 1,
-                    bacon: 2,
-                    cheese: 1
-                }
-            }
         case ADD_INGREDIENT:
-            newCount = updateIngredient(state, action.ingredientType, (a, b) => a + b)
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientType]: newCount
-                }
-            }
+            return buildUpdatedState({
+                state,
+                ingredientType: action.ingredientType,
+                operation: (a, b) => a + b
+            })
         case REMOVE_INGREDIENT:
-            newCount = updateIngredient(state, action.ingredientType, (a, b) => a - b)
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientType]: newCount
-                }
-            }
+            return buildUpdatedState({
+                state,
+                ingredientType: action.ingredientType,
+                operation: (a, b) => a - b
+            })
         default:
             return state
     }
