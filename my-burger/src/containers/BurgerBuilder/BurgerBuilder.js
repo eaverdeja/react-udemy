@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import reduce from 'lodash/reduce'
 import axios from '../../axios-orders'
-import qs from 'query-string'
 
 import Aux from '../../hoc/Aux/Aux'
 import Burger from '../../components/Burger/Burger'
@@ -36,13 +35,7 @@ class BurgerBuilder extends Component {
 
     cancelPurchaseHandler = () => this.setState({ purchasing: false })
 
-    purchaseHandler = () => {
-        const query = qs.stringify({
-            totalPrice: this.props.totalPrice,
-            ...this.props.ingredients
-        })
-        this.props.history.push(`/checkout?${query}`)
-    }
+    purchaseHandler = () => this.props.history.push('/checkout')
 
     render() {
         //As I see it, disabledControls is defined here since it's strictly
