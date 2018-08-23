@@ -16,24 +16,20 @@ import { ADD_INGREDIENT, REMOVE_INGREDIENT } from '../../store/actions';
 
 class BurgerBuilder extends Component {
     state = {
-        purchasable: false,
         purchasing: false,
         loading: false,
         error: false
     }
-
-    //The updatePurchasableState method can be defined as such because
-    //they are called strictly from within this class
-    //i.e we don't have to worry about `this` 
+ 
+    //This method stays here! It's just an UI validation
+    //No silly redux for you >:|
     updatePurchasableState () {
         const totalIngredients = reduce(this.props.ingredients,
             (sum, ingredientCount) => sum + ingredientCount,
             0
         )
 
-        this.setState({
-            purchasable: totalIngredients > 0
-        })
+        return totalIngredients > 0
     }
 
     purchasingHandler = () => this.setState({ purchasing: true })
@@ -79,7 +75,7 @@ class BurgerBuilder extends Component {
                         removeIngredient={this.props.removeIngredientHandler}
                         disabledControls={disabledControls} 
                         price={this.props.totalPrice} 
-                        purchasable={this.state.purchasable}
+                        purchasable={this.updatePurchasableState()}
                         onPurchase={this.purchasingHandler} />
                 </Aux>
             )
