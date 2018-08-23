@@ -22,11 +22,10 @@ class BurgerBuilder extends Component {
         error: false
     }
 
-    //The update* methods can be defined as such because
+    //The updatePurchasableState method can be defined as such because
     //they are called strictly from within this class
     //i.e we don't have to worry about `this` 
     updatePurchasableState () {
-        console.log(this.props.ingredients)
         const totalIngredients = reduce(this.props.ingredients,
             (sum, ingredientCount) => sum + ingredientCount,
             0

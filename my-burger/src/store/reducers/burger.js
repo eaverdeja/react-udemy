@@ -28,10 +28,7 @@ function updateIngredient (state, ingredientType, operation) {
 
     const newPrice = operation(state.totalPrice, INGREDIENT_PRICES[ingredientType])
         
-    return {
-        newCount,
-        newPrice
-    }
+    return { newCount, newPrice }
 }
 
 function buildUpdatedState ({state, ingredientType, operation}) {
