@@ -12,6 +12,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import { addIngredient, removeIngredient } from '../../store/actions'
+import { initIngredients } from '../../store/actions/burgerBuilder';
 
 class BurgerBuilder extends Component {
     state = {
@@ -35,6 +36,10 @@ class BurgerBuilder extends Component {
 
     purchaseHandler = () => this.props.history.push('/checkout')
 
+    componentDidMount () {
+        this.props.onInitIngredients()
+    }
+
     render() {
         //As I see it, disabledControls is defined here since it's strictly
         //an inference of some UI state (disabled "LESS" buttons in this case)
@@ -48,7 +53,7 @@ class BurgerBuilder extends Component {
             }), {})
         
         let burger = <p>Something went wrong!</p>
-        if(!this.state.error) {
+        if(this.props.error === false) {
             burger = (
                 <div style={{marginTop: '200px'}}>
                     <Spinner />
@@ -95,12 +100,14 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = ({ burger }) => ({
     ingredients: burger.ingredients,
-    totalPrice: burger.totalPrice
+    totalPrice: burger.totalPrice,
+    error: burger.error
 })
 
 const mapDispatchToProps = dispatch => ({
     addIngredientHandler: (ingredientType) => dispatch(addIngredient(ingredientType)),
-    removeIngredientHandler: (ingredientType) => dispatch(removeIngredient(ingredientType))
+    removeIngredientHandler: (ingredientType) => dispatch(removeIngredient(ingredientType)),
+    onInitIngredients: () => dispatch(initIngredients())
 })
 
 export default connect(

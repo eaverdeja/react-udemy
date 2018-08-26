@@ -1,4 +1,5 @@
-import { ADD_INGREDIENT, REMOVE_INGREDIENT } from "../actions/actionTypes";
+import { ADD_INGREDIENT, REMOVE_INGREDIENT, SET_INGREDIENTS, FETCH_INGREDIENTS_FAILED } from "../actions/actionTypes";
+import reduce from 'lodash/reduce'
 
 const INGREDIENT_PRICES = {
     'salad': 0.5,
@@ -9,7 +10,8 @@ const INGREDIENT_PRICES = {
 
 const initialState = {
     ingredients: null,
-    totalPrice: 4
+    totalPrice: null,
+    error: false
 }
 
 //These helper functions help in keeping our
@@ -52,6 +54,26 @@ const burgerReducer = (state = initialState, action) => {
                 ingredientType: action.ingredientType,
                 operation: (a, b) => a - b
             })
+        case SET_INGREDIENTS:
+            const { ingredients } = action
+            const totalPrice = reduce(
+                ingredients,
+                (acc, count, ingredient) => {
+                    return acc + INGREDIENT_PRICES[ingredient] * count
+                }, 4
+            )
+
+            return {
+                ...state,
+                ingredients,
+                totalPrice,
+                error: false
+            }
+        case FETCH_INGREDIENTS_FAILED:
+            return {
+                ...state,
+                error: true
+            }
         default:
             return state
     }

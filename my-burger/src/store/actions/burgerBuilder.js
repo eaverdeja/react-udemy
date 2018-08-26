@@ -25,5 +25,5 @@ export const fetchIngredientsFailed = () => ({
 
 export const initIngredients = () =>
     dispatch => axios.get('ingredients.json')
-        .then(res => console.log('Fetched ingredients: ', res.data) && dispatch(setIngredients(res.data)))
-        .catch(error => fetchIngredientsFailed())
+        .then(res => dispatch(setIngredients(res.data)))
+        .catch(error => dispatch(fetchIngredientsFailed()))
