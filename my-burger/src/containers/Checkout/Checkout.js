@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
 import ContactData from './ContactData/ContactData'
+import { purchaseBurger } from '../../store/actions'
 
 class Checkout extends Component {
     checkoutCanceledHandler = () => {
@@ -12,6 +13,14 @@ class Checkout extends Component {
 
     checkoutContinuedHandler = () => {
         this.props.history.push('/checkout/contact-data')
+    }
+
+    orderHandler = values => {
+        this.props.onOrderBurger({
+            ingredients: this.props.ingredients,
+            totalPrice: this.props.totalPrice,
+            formData: values
+        })
     }
     
     render() {
@@ -27,7 +36,7 @@ class Checkout extends Component {
                         checkoutContinued={this.checkoutContinuedHandler} />
                     <Route
                         path={this.props.match.path + '/contact-data'}
-                        component={ContactData} />
+                        render={() => <ContactData onSubmit={this.orderHandler} />} />
                 </div>
             )
         }
@@ -41,4 +50,8 @@ const mapStateToProps = ({ burger, order }) => ({
     purchased: order.purchased
 })
 
-export default connect(mapStateToProps)(Checkout)
+const mapDispatchToProps = dispatch => ({
+    onOrderBurger: orderData => dispatch(purchaseBurger(orderData))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout)
