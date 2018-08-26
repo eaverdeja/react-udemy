@@ -11,7 +11,7 @@ import Modal from '../../components/UI/Modal/Modal'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
-import { addIngredient, removeIngredient } from '../../store/actions'
+import { addIngredient, removeIngredient, purchaseInit } from '../../store/actions'
 import { initIngredients } from '../../store/actions/burgerBuilder';
 
 class BurgerBuilder extends Component {
@@ -34,7 +34,10 @@ class BurgerBuilder extends Component {
 
     cancelPurchaseHandler = () => this.setState({ purchasing: false })
 
-    purchaseHandler = () => this.props.history.push('/checkout')
+    purchaseHandler = () => {
+        this.props.onInitPurchase()
+        this.props.history.push('/checkout')
+    }
 
     componentDidMount () {
         this.props.onInitIngredients()
@@ -107,7 +110,8 @@ const mapStateToProps = ({ burger }) => ({
 const mapDispatchToProps = dispatch => ({
     addIngredientHandler: (ingredientType) => dispatch(addIngredient(ingredientType)),
     removeIngredientHandler: (ingredientType) => dispatch(removeIngredient(ingredientType)),
-    onInitIngredients: () => dispatch(initIngredients())
+    onInitIngredients: () => dispatch(initIngredients()),
+    onInitPurchase: () => dispatch(purchaseInit())
 })
 
 export default connect(
