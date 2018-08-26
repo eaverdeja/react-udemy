@@ -5,13 +5,17 @@ import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 import { BrowserRouter } from 'react-router-dom'
 
-import { createStore } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
 import rootReducer from './store/rootReducer'
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ || compose
 const store = createStore(
     rootReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    composeEnhancers(
+        applyMiddleware(thunk)
+    )
 )
 
 const app = (
