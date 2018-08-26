@@ -63,9 +63,10 @@ const burgerReducer = (state = initialState, action) => {
                 }, 4
             )
 
+            const { salad, bacon, cheese, meat } = ingredients
             return {
                 ...state,
-                ingredients,
+                ingredients: { salad, bacon, cheese, meat },
                 totalPrice,
                 error: false
             }
