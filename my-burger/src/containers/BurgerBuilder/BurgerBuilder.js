@@ -15,9 +15,7 @@ import { addIngredient, removeIngredient } from '../../store/actions'
 
 class BurgerBuilder extends Component {
     state = {
-        purchasing: false,
-        loading: false,
-        error: false
+        purchasing: false
     }
  
     //This method stays here! It's just an UI validation
@@ -50,7 +48,7 @@ class BurgerBuilder extends Component {
             }), {})
         
         let burger = <p>Something went wrong!</p>
-        if(this.state.error === false) {
+        if(!this.state.error) {
             burger = (
                 <div style={{marginTop: '200px'}}>
                     <Spinner />
@@ -79,10 +77,6 @@ class BurgerBuilder extends Component {
                 cancelPurchase={this.cancelPurchaseHandler} 
                 purchase={this.purchaseHandler}
             />
-        }
-
-        if(this.state.loading) {
-            orderSummary = <Spinner />
         }
 
         return (
