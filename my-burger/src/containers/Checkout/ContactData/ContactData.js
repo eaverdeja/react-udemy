@@ -6,8 +6,10 @@ import classes from './ContactData.css'
 import axios from '../../../axios-orders'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import Input from '../../../components/UI/Input/Input'
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
+import { purchaseBurgerStart } from '../../../store/actions'
 
 class ContactData extends Component {
     state = {
@@ -87,22 +89,19 @@ class ContactData extends Component {
         }
     }
     
-    orderHandler = (e) => {
-        e.preventDefault()
-        this.setState({ loading: true })
+    orderHandler = event => {
+        event.preventDefault()
+        
         const orderData = {}
         map(this.state.orderForm, ( input, key ) => {
             orderData[key] = input.value
         })
-        axios.post('/orders.json', {
+
+        this.props.onOrderBurger({
             ingredients: this.props.ingredients,
             totalPrice: this.props.totalPrice,
             orderData
-        }).then(() => {
-            this.setState({ loading: false })
-            this.props.history.push('/')
         })
-        .catch(() => this.setState({ loading: false }))
     }
 
     checkValidity(value, rules) {
@@ -205,4 +204,11 @@ const mapStateToProps = ({ burger }) => ({
     totalPrice: burger.totalPrice
 })
 
-export default connect(mapStateToProps)(ContactData)
+const mapDispatchToProps = dispatch => ({
+    onOrderBurger: orderData => dispatch(purchaseBurgerStart(orderData))
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withErrorHandler(ContactData, axios))
