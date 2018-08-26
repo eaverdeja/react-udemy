@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import reduce from 'lodash/reduce'
 import axios from '../../axios-orders'
 
-import Aux from '../../hoc/Aux/Aux'
+import Aux from '../../hoc/Auxiliary/Aux'
 import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import Modal from '../../components/UI/Modal/Modal'
