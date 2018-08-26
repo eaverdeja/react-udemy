@@ -92,15 +92,15 @@ class ContactData extends Component {
     orderHandler = event => {
         event.preventDefault()
         
-        const orderData = {}
+        const formData = {}
         map(this.state.orderForm, ( input, key ) => {
-            orderData[key] = input.value
+            formData[key] = input.value
         })
 
         this.props.onOrderBurger({
             ingredients: this.props.ingredients,
             totalPrice: this.props.totalPrice,
-            orderData
+            formData
         })
     }
 
