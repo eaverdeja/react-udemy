@@ -1,5 +1,6 @@
 import { ADD_INGREDIENT, REMOVE_INGREDIENT, SET_INGREDIENTS, FETCH_INGREDIENTS_FAILED } from "../actions/actionTypes";
 import reduce from 'lodash/reduce'
+import { createReducer } from '../utils'
 
 const INGREDIENT_PRICES = {
     'salad': 0.5,
@@ -40,44 +41,35 @@ function buildUpdatedState ({state, ingredientType, operation}) {
     }
 }
 
-const burgerReducer = (state = initialState, action) => {
-    switch(action.type) {
-        case ADD_INGREDIENT:
-            return buildUpdatedState({
-                state,
-                ingredientType: action.ingredientType,
-                operation: (a, b) => a + b
-            })
-        case REMOVE_INGREDIENT:
-            return buildUpdatedState({
-                state,
-                ingredientType: action.ingredientType,
-                operation: (a, b) => a - b
-            })
-        case SET_INGREDIENTS:
-            const { ingredients } = action
-            const totalPrice = reduce(
-                ingredients,
-                (acc, count, ingredient) => {
-                    return acc + INGREDIENT_PRICES[ingredient] * count
-                }, 4
-            )
+const burgerReducer = createReducer(initialState, {
+    [ADD_INGREDIENT]: (state, action) => buildUpdatedState({
+        state,
+        ingredientType: action.ingredientType,
+        operation: (a, b) => a + b
+    }),
+    [REMOVE_INGREDIENT]: (state, action) => buildUpdatedState({
+        state,
+        ingredientType: action.ingredientType,
+        operation: (a, b) => a - b
+    }),
+    [SET_INGREDIENTS]: (state, action) => {
+        const { ingredients } = action
+        const totalPrice = reduce(
+            ingredients,
+            (acc, count, ingredient) => {
+                return acc + INGREDIENT_PRICES[ingredient] * count
+            }, 4
+        )
 
-            const { salad, bacon, cheese, meat } = ingredients
-            return {
-                ...state,
-                ingredients: { salad, bacon, cheese, meat },
-                totalPrice,
-                error: false
-            }
-        case FETCH_INGREDIENTS_FAILED:
-            return {
-                ...state,
-                error: true
-            }
-        default:
-            return state
-    }
-}
+        const { salad, bacon, cheese, meat } = ingredients
+        return {
+            ...state,
+            ingredients: { salad, bacon, cheese, meat },
+            totalPrice,
+            error: false
+        }
+    },
+    [FETCH_INGREDIENTS_FAILED]: (state, action) => ({ ...state, error: true }),
+})
 
 export default burgerReducer

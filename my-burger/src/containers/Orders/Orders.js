@@ -18,11 +18,12 @@ class Orders extends Component {
         if(this.props.orders) {
             orders = map(
                 this.props.orders,
-                (order, id) =>
+                (order, id) => (
                     <Order
                         key={id}
                         price={order.orderData.totalPrice}
                         ingredients={order.orderData.ingredients} />
+                )
             )
         }
 
