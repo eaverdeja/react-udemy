@@ -9,5 +9,12 @@ export const increment = () => ({ type: INCREMENT })
 export const decrement = () => ({ type: DECREMENT })
 export const add = value => ({ type: ADD, value})
 export const subtract = value => ({ type: SUBTRACT, value })
-export const storeResult = value => ({ type: STORE_RESULT, value })
+
+export const saveResult = value => ({ type: STORE_RESULT, value })
+
+export const storeResult = value => {
+    return dispatch =>
+        setTimeout(() => dispatch(saveResult(value)), 2000)
+}
+
 export const deleteResult = id => ({ type: DELETE_RESULT, id })
