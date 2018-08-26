@@ -1,4 +1,4 @@
-import { PURCHASE_BURGER_SUCCESS, PURCHASE_BURGER_FAILURE } from "../actions/actionTypes"
+import { PURCHASE_BURGER_SUCCESS, PURCHASE_BURGER_FAILURE, PURCHASE_BURGER_START } from "../actions/actionTypes"
 
 const initialState = {
     orders: [],
@@ -7,6 +7,11 @@ const initialState = {
 
 const orderReducer = (state = initialState, action) => {
     switch(action.type) {
+        case PURCHASE_BURGER_START:
+            return {
+                ...state,
+                loading: true
+            }
         case PURCHASE_BURGER_SUCCESS:
             const newOrder = {
                 ...action.orderData,

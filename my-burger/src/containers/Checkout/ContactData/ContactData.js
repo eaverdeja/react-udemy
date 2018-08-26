@@ -9,7 +9,7 @@ import Input from '../../../components/UI/Input/Input'
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
-import { purchaseBurgerStart } from '../../../store/actions'
+import { purchaseBurger } from '../../../store/actions'
 
 class ContactData extends Component {
     state = {
@@ -53,8 +53,7 @@ class ContactData extends Component {
                 }
             }),
         },
-        formIsValid: false,
-        loading: false
+        formIsValid: false
     }
 
     //This short (but kinda hard to read - meh) factory function
@@ -186,7 +185,7 @@ class ContactData extends Component {
                 </Button>
             </form>
         )
-        if(this.state.loading) {
+        if(this.props.loading) {
             form = <Spinner />
         }
 
@@ -199,13 +198,14 @@ class ContactData extends Component {
     }
 }
 
-const mapStateToProps = ({ burger }) => ({
+const mapStateToProps = ({ burger, order }) => ({
     ingredients: burger.ingredients,
-    totalPrice: burger.totalPrice
+    totalPrice: burger.totalPrice,
+    loading: order.loading
 })
 
 const mapDispatchToProps = dispatch => ({
-    onOrderBurger: orderData => dispatch(purchaseBurgerStart(orderData))
+    onOrderBurger: orderData => dispatch(purchaseBurger(orderData))
 })
 
 export default connect(
