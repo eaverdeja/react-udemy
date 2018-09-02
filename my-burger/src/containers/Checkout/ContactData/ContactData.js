@@ -18,6 +18,7 @@ class ContactData extends Component {
         value && value.length > max ? `Must be ${max} characters or less` : undefined
     minLength = min => value =>
         value && value.length < min ? `Must be ${min} characters or more` : undefined
+
     minLength1 = this.minLength(1)
     minLength5 = this.minLength(5)
     maxLength5 = this.maxLength(5)
@@ -51,6 +52,20 @@ class ContactData extends Component {
                     label="ZIP Code"
                     validate={[this.required, this.minLength5, this.maxLength5]} />
                 <div>
+                    <label className={classes.Label}>Delivery method</label>
+                    <div>
+                        <Field
+                            className={classes.InputElement}
+                            type="text"
+                            name="deliveryMethod"
+                            component="select"
+                            label="Delivery method">
+                            <option value="fastest">Fastest</option>
+                            <option value="cheapest">Cheapest</option>
+                        </Field>
+                    </div>
+                </div>
+                <div>
                     <Button
                         type="submit"
                         btnType="Success"
@@ -60,7 +75,7 @@ class ContactData extends Component {
                     <Button
                         type="button"
                         disabled={pristine || submitting}
-                        onClick={reset}>
+                        clicked={reset}>
                         CLEAR VALUES
                     </Button>
                 </div>
@@ -79,11 +94,7 @@ class ContactData extends Component {
     }
 }
 
-const mapStateToProps = ({ burger, order }) => ({
-    ingredients: burger.ingredients,
-    totalPrice: burger.totalPrice,
-    loading: order.loading
-})
+const mapStateToProps = ({ order }) => ({ loading: order.loading })
 
 export default compose(
     connect(mapStateToProps),

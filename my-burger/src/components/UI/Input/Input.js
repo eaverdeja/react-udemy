@@ -3,12 +3,10 @@ import React from 'react'
 import classes from './Input.css'
 
 const input = ({
-    value,
-    onChange,
     input,
     label,
     type,
-    meta: { touched, error, warning},
+    meta: { touched, error, warning },
 }) => {
     const inputClasses = [classes.InputElement]
     
